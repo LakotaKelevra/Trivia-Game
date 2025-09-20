@@ -34,10 +34,14 @@ function Quiz() {
 
 
     return (
-        <div className="container mx-auto p-4 text-center mt-10 py-10">
-            <h1 className="text-4xl font-extrabold text-primary mb-6 drop-shadow-lg tracking-wide">Trivia Game: </h1>
-            <h2 className="text-xl font-semibold text-secondary mb-4 tracking-wide">You've selected {numberOfQuestions} questions from {category !== "0" ? category : "various"} categories and {level !== "0" ? level : "mixed"} difficulty level</h2>
-            <div className="card w-96 bg-base-100 card-lg shadow-sm justify-center mx-auto mt-4">
+        <div className="container mx-auto p-4 text-center mt-5">
+            {!started && 
+            <>
+                <h1 className="text-4xl font-extrabold text-primary mb-6 drop-shadow-lg tracking-wide">Trivia Game: </h1>
+                <h2 className="text-xl font-semibold text-secondary mb-4 tracking-wide">You've selected {numberOfQuestions} questions from {category !== "0" ? category : "various"} categories and {level !== "0" ? level : "mixed"} difficulty level</h2>
+                </>
+            }
+                <div className="card w-96 bg-base-100 card-lg shadow-sm justify-center mx-auto mt-4">
                 {loading && <p>Loading questions...</p>}
                 {error && <p>Error loading questions, please try again.</p>}
 

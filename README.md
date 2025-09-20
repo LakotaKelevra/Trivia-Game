@@ -1,5 +1,6 @@
-
 # Trivia Game
+
+[Prova subito la demo online su Vercel!](https://trivia-game-sigma-two.vercel.app/)
 
 Trivia Game è un'applicazione web sviluppata in React che permette di giocare a quiz a risposta multipla, sfruttando le domande fornite dall'API Open Trivia DB. Il progetto è pensato per offrire un'esperienza di gioco fluida, moderna e personalizzabile.
 
