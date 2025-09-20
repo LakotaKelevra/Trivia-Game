@@ -1,12 +1,23 @@
-# React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Trivia Game
 
-Currently, two official plugins are available:
+Trivia Game è un'applicazione web sviluppata in React che permette di giocare a quiz a risposta multipla, sfruttando le domande fornite dall'API Open Trivia DB. Il progetto è pensato per offrire un'esperienza di gioco fluida, moderna e personalizzabile.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Funzionalità principali
 
-## Expanding the ESLint configuration
+- **Quiz a risposta multipla**: scegli categoria, difficoltà e numero di domande.
+- **Domande sempre nuove**: grazie all'uso del token Open Trivia DB, le domande non si ripetono tra una sessione e l'altra.
+- **Punteggio cumulativo**: il punteggio cresce con ogni risposta corretta, anche tra sessioni consecutive.
+- **Interfaccia moderna**: UI realizzata con Tailwind CSS e animazioni Framer Motion.
+- **Navigazione semplice**: gestione delle sessioni tramite React Router.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Tecnologie utilizzate
+
+- [React](https://react.dev/)
+- [Vite](https://vitejs.dev/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Framer Motion](https://www.framer.com/motion/)
+- [Open Trivia DB API](https://opentdb.com/)
+
+
+
