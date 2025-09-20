@@ -1,4 +1,4 @@
-import { motion, time } from "framer-motion";
+import { motion } from "framer-motion";
 import { useMemo } from "react";
 import useCountdown from "../hooks/useCountdown";
 
@@ -11,8 +11,8 @@ function shuffle(array) {
     return arr;
 }
 
-function QuestionCard({ question, answers, onSelect, correctAnswer, started, answered, selectedAnswer, currentIndex }) {
-    const shuffledAnswers = useMemo(() => shuffle(answers), [question, answers]);
+function QuestionCard({ question, answers, onSelect, correctAnswer, started, answered, selectedAnswer, currentIndex, gameSessionId }) {
+    const shuffledAnswers = useMemo(() => shuffle(answers), [currentIndex, gameSessionId]);
     const timeLeft = useCountdown(10, started, () => onSelect(null), currentIndex);
 
     function decodeHtml(html) {

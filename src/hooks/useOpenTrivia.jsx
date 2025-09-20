@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 
-function useOpenTrivia(userName, category, level, numberOfQuestions) {
+function useOpenTrivia(userName, category, level, numberOfQuestions, token) {
     const [trivia, setTrivia] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    console.log(userName, category, level, numberOfQuestions);
+    console.log(userName, category, level, numberOfQuestions, token);
 
     useEffect(() => {
         const params = new URLSearchParams({
@@ -17,6 +17,10 @@ function useOpenTrivia(userName, category, level, numberOfQuestions) {
 
         if (level !== "0") {
             params.append('difficulty', level.toLowerCase());
+        }
+
+        if (token) {
+            params.append('token', token);
         }
 
         const url = `https://opentdb.com/api.php?${params.toString()}`;
@@ -34,7 +38,7 @@ function useOpenTrivia(userName, category, level, numberOfQuestions) {
                 setError(error);
             })
             .finally(() => setLoading(false));
-    }, [category, level, numberOfQuestions]);
+    }, [category, level, numberOfQuestions, token]);
 
     console.log(trivia);
     

@@ -1,19 +1,19 @@
 import { useLocation } from "react-router-dom";
 import { useState, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import QuestionCard from "../components/QuestionCard";
 import useOpenTrivia from "../hooks/useOpenTrivia";
-
 
 function Quiz() {
     const { state } = useLocation();
     const { userName, category, level, numberOfQuestions } = state || {};
-    const { trivia, loading, error } = useOpenTrivia(userName, category, level, numberOfQuestions);
+    const [token, setToken] = useState(null);
+    const [gameSessionId, setGameSessionId] = useState(1);
+    const { trivia, loading, error } = useOpenTrivia(userName, category, level, numberOfQuestions, token);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [selectedAnswer, setSelectedAnswer] = useState(null);
     const [answered, setAnswered] = useState(false);
     const [score, setScore] = useState(0);
-    const [token, setToken] = useState(null);
     const [started, setStarted] = useState(false);
 
 
@@ -35,7 +35,8 @@ function Quiz() {
 
     return (
         <div className="container mx-auto p-4 text-center mt-10 py-10">
-            <h1>Welcome to the Trivia Game!</h1>
+            <h1 className="text-4xl font-extrabold text-primary mb-6 drop-shadow-lg tracking-wide">Trivia Game: </h1>
+            <h2 className="text-xl font-semibold text-secondary mb-4 tracking-wide">You've selected {numberOfQuestions} questions from {category !== "0" ? category : "various"} categories and {level !== "0" ? level : "mixed"} difficulty level</h2>
             <div className="card w-96 bg-base-100 card-lg shadow-sm justify-center mx-auto mt-4">
                 {loading && <p>Loading questions...</p>}
                 {error && <p>Error loading questions, please try again.</p>}
@@ -50,7 +51,7 @@ function Quiz() {
                     <AnimatePresence mode="wait">
                         {started && currentIndex < trivia.length && (
                             <QuestionCard
-                                key={currentIndex}
+                                key={gameSessionId + '-' + currentIndex}
                                 question={trivia[currentIndex].question}
                                 answers={[
                                     trivia[currentIndex].correct_answer,
@@ -62,6 +63,7 @@ function Quiz() {
                                 answered={answered}
                                 selectedAnswer={selectedAnswer}
                                 currentIndex={currentIndex}
+                                gameSessionId={gameSessionId}
                             />
                         )}
                     </AnimatePresence>
@@ -69,7 +71,27 @@ function Quiz() {
                     {started && currentIndex >= trivia.length && (
                         <>
                             <h2 className="mt-4">Quiz Finished!</h2>
-                            <p>Your score: {score} out of {trivia.length}</p>
+                            <p>Your score: {score} out of {trivia.length * (gameSessionId)}</p>
+                            <button className="btn btn-primary mr-2" onClick={() => {
+                                setCurrentIndex(0);
+                                setStarted(false);
+                                setToken(null);
+                                setScore(0);
+                                setSelectedAnswer(null);
+                                setAnswered(false);
+                                navigate("/");
+                            }}>Start a new game</button>
+                            <button className="btn btn-secondary mr-2" onClick={async () => {
+                                const result = await fetch('https://opentdb.com/api_token.php?command=request');
+                                const data = await result.json();
+                                setToken(data.token);
+                                setCurrentIndex(0);
+                                setStarted(true);
+                                setSelectedAnswer(null);
+                                setAnswered(false);
+                                setGameSessionId(id => id + 1);
+                                setScore(score);
+                            }}>Go on playing</button>
                         </>
                     )}
 
