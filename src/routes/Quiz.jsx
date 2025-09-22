@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 import QuestionCard from "../components/QuestionCard";
 import useOpenTrivia from "../hooks/useOpenTrivia";
@@ -15,6 +15,7 @@ function Quiz() {
     const [answered, setAnswered] = useState(false);
     const [score, setScore] = useState(0);
     const [started, setStarted] = useState(false);
+    const [gameOver, setGameOver] = useState(false);
 
 
     const handleAnswer = useCallback((answer) => {
@@ -31,6 +32,16 @@ function Quiz() {
         }, 1000);
     }, [currentIndex, trivia]);
 
+    // Ritarda la visualizzazione del blocco Game Over di 1 secondo
+    useEffect(() => {
+        if (currentIndex >= trivia.length && started) {
+            const t = setTimeout(() => setGameOver(true), 1000);
+            return () => clearTimeout(t);
+        } else {
+            setGameOver(false);
+        }
+    }, [currentIndex, trivia.length, started]);
+
 
 
     return (
@@ -46,7 +57,7 @@ function Quiz() {
                 {error && <p>Error loading questions, please try again.</p>}
 
                 <div className="card-body text-center w-full">
-                    {!started && (
+                    {!started && currentIndex === 0 && (
                         <>
                             <h2 className="mt-2">Good luck, {userName}!</h2>
                             <button className="btn btn-primary" onClick={() => setStarted(true)}>Start Quiz</button>
@@ -72,7 +83,7 @@ function Quiz() {
                         )}
                     </AnimatePresence>
 
-                    {started && currentIndex >= trivia.length && (
+                    {started && currentIndex >= trivia.length && gameOver && (
                         <>
                             <h2 className="mt-4 mb-10">Quiz Finished!</h2>
                             <p className="mb-4">Your score: {score} out of {trivia.length * (gameSessionId)}</p>
