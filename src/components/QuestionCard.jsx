@@ -13,7 +13,7 @@ function shuffle(array) {
 
 function QuestionCard({ question, answers, onSelect, correctAnswer, started, answered, selectedAnswer, currentIndex, gameSessionId }) {
     const shuffledAnswers = useMemo(() => shuffle(answers), [question, currentIndex, gameSessionId]);
-    const timeLeft = useCountdown(10, started, () => onSelect(null), currentIndex);
+    const timeLeft = useCountdown(15, started, () => onSelect(null), currentIndex);
 
     function decodeHtml(html) {
         const txt = document.createElement('textarea');

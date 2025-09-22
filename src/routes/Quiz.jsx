@@ -3,6 +3,7 @@ import { useState, useCallback, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 import QuestionCard from "../components/QuestionCard";
 import useOpenTrivia from "../hooks/useOpenTrivia";
+import useRanking from "../hooks/useRanking";
 
 function Quiz() {
     const location = useLocation();
@@ -12,7 +13,7 @@ function Quiz() {
     // Redirect automatico se i dati non sono presenti
     useEffect(() => {
         if (!userName || !category || !level || !numberOfQuestions) {
-           return <Navigate to="/" replace />;
+            return <Navigate to="/" replace />;
         }
     }, [userName, category, level, numberOfQuestions, navigate]);
 
@@ -27,7 +28,7 @@ function Quiz() {
                 level = parsed.level;
                 numberOfQuestions = parsed.numberOfQuestions;
                 categoryName = parsed.categoryName;
-            } catch {}
+            } catch { }
         }
     }
 
@@ -46,6 +47,7 @@ function Quiz() {
     const [score, setScore] = useState(0);
     const [started, setStarted] = useState(false);
     const [gameOver, setGameOver] = useState(false);
+    const { addRecord } = useRanking();
 
 
     const handleAnswer = useCallback((answer) => {
@@ -66,6 +68,19 @@ function Quiz() {
     useEffect(() => {
         if (currentIndex >= trivia.length && started) {
             const t = setTimeout(() => setGameOver(true), 1000);
+            const fetchTokenAndSave = async () => {
+                if (!token) {try {
+                    const result = await fetch('https://opentdb.com/api_token.php?command=request');
+                    const data = await result.json();
+                    setToken(data.token);
+
+                    // usa il token appena ricevuto
+                } catch (err) {
+                    console.error(err);
+                }}
+                addRecord(token, userName, score, numberOfQuestions * gameSessionId);
+            };
+            fetchTokenAndSave();
             return () => clearTimeout(t);
         } else {
             setGameOver(false);
@@ -74,15 +89,17 @@ function Quiz() {
 
 
 
+
+
     return (
-    <div className="container mx-auto p-2 text-center mt-2 max-w-full overflow-x-hidden">
-            {!started && 
-            <>
-                <h1 className="text-3xl font-extrabold text-primary mb-3 drop-shadow-lg tracking-wide">Trivia Game: </h1>
-                <h2 className="text-lg font-semibold text-secondary mb-2 tracking-wide">You've selected {numberOfQuestions} questions from {categoryName || (category !== "0" ? category : "various")} categories and {level !== "0" ? level : "mixed"} difficulty level</h2>
+        <div className="container mx-auto p-2 text-center mt-2 max-w-full overflow-x-hidden">
+            {!started &&
+                <>
+                    <h1 className="text-3xl font-extrabold text-primary mb-3 drop-shadow-lg tracking-wide">Trivia Game: </h1>
+                    <h2 className="text-lg font-semibold text-secondary mb-2 tracking-wide">You've selected {numberOfQuestions} questions from {categoryName || (category !== "0" ? category : "various")} categories and {level !== "0" ? level : "mixed"} difficulty level</h2>
                 </>
             }
-                <div className="card w-full sm:max-w-md bg-base-100 card-lg shadow-xl justify-center mx-auto mt-2">
+            <div className="card w-full sm:max-w-md bg-base-100 card-lg shadow-xl justify-center mx-auto mt-2">
                 {loading && <p>Loading questions...</p>}
                 {error && <p>Error loading questions, please try again.</p>}
 
@@ -126,10 +143,8 @@ function Quiz() {
                                 setAnswered(false);
                                 navigate("/");
                             }}>Start a new game</button>
-                            <button className="btn btn-secondary mr-2" onClick={async () => {
-                                const result = await fetch('https://opentdb.com/api_token.php?command=request');
-                                const data = await result.json();
-                                setToken(data.token);
+                            <button className="btn btn-secondary mr-2" onClick={() => {
+                                setToken(token);
                                 setCurrentIndex(0);
                                 setStarted(true);
                                 setSelectedAnswer(null);
@@ -137,8 +152,23 @@ function Quiz() {
                                 setGameSessionId(id => id + 1);
                                 setScore(score);
                             }}>Go on playing</button>
+
                         </>
                     )}
+
+                    {/* {useEffect(() => {
+                        if (gameOver) {
+                            async () => {
+                                const result = await fetch('https://opentdb.com/api_token.php?command=request');
+                                const data = await result.json();
+                                setToken(data.token);
+
+                                addRecord(token, userName, score, numberOfQuestions * gameSessionId);
+                            }
+                        }
+                    }, [gameOver, token, userName, score, numberOfQuestions, gameSessionId])} */}
+
+
 
                 </div>
             </div>

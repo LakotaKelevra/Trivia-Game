@@ -7,6 +7,11 @@ function Navbar() {
             <div className="flex-1">
                 <Link to="/" className="btn btn-ghost text-xl">Trivia Game</Link>
             </div>
+            <div className="flex-none">
+                <ul className="menu menu-horizontal px-1">
+                    <li><Link to="/ranking">Ranking</Link></li>
+                </ul>
+            </div>
           
         </div>
     );
