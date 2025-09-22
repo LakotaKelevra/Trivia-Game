@@ -19,8 +19,13 @@ function Home() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        let categoryName = "All categories";
+        if (category !== "0") {
+            const found = categories.find(cat => String(cat.id) === String(category));
+            if (found) categoryName = found.name;
+        }
         navigate("/quiz", {
-            state: { userName, category, level, numberOfQuestions }
+            state: { userName, category, level, numberOfQuestions, categoryName }
         });
     }
 

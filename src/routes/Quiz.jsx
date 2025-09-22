@@ -1,12 +1,42 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useCallback, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 import QuestionCard from "../components/QuestionCard";
 import useOpenTrivia from "../hooks/useOpenTrivia";
 
 function Quiz() {
-    const { state } = useLocation();
-    const { userName, category, level, numberOfQuestions } = state || {};
+    const location = useLocation();
+    const navigate = useNavigate();
+    // Recupera i dati da location.state o sessionStorage
+    let { userName, category, level, numberOfQuestions, categoryName } = location.state || {};
+    // Redirect automatico se i dati non sono presenti
+    useEffect(() => {
+        if (!userName || !category || !level || !numberOfQuestions) {
+           return <Navigate to="/" replace />;
+        }
+    }, [userName, category, level, numberOfQuestions, navigate]);
+
+    // Se non ci sono nello state, prova a recuperarli dalla sessione
+    if (!userName || !category || !level || !numberOfQuestions || !categoryName) {
+        const sessionData = sessionStorage.getItem("quizData");
+        if (sessionData) {
+            try {
+                const parsed = JSON.parse(sessionData);
+                userName = parsed.userName;
+                category = parsed.category;
+                level = parsed.level;
+                numberOfQuestions = parsed.numberOfQuestions;
+                categoryName = parsed.categoryName;
+            } catch {}
+        }
+    }
+
+    // Se ancora mancano, redirect (opzionale: puoi aggiungere un redirect automatico qui)
+
+    // Salva i dati in sessionStorage quando disponibili
+    if (userName && category && level && numberOfQuestions && categoryName) {
+        sessionStorage.setItem("quizData", JSON.stringify({ userName, category, level, numberOfQuestions, categoryName }));
+    }
     const [token, setToken] = useState(null);
     const [gameSessionId, setGameSessionId] = useState(1);
     const { trivia, loading, error } = useOpenTrivia(userName, category, level, numberOfQuestions, token);
@@ -40,7 +70,7 @@ function Quiz() {
         } else {
             setGameOver(false);
         }
-    }, [currentIndex, trivia.length, started]);
+    }, [currentIndex, started]);
 
 
 
@@ -49,7 +79,7 @@ function Quiz() {
             {!started && 
             <>
                 <h1 className="text-3xl font-extrabold text-primary mb-3 drop-shadow-lg tracking-wide">Trivia Game: </h1>
-                <h2 className="text-lg font-semibold text-secondary mb-2 tracking-wide">You've selected {numberOfQuestions} questions from {category !== "0" ? category : "various"} categories and {level !== "0" ? level : "mixed"} difficulty level</h2>
+                <h2 className="text-lg font-semibold text-secondary mb-2 tracking-wide">You've selected {numberOfQuestions} questions from {categoryName || (category !== "0" ? category : "various")} categories and {level !== "0" ? level : "mixed"} difficulty level</h2>
                 </>
             }
                 <div className="card w-full sm:max-w-md bg-base-100 card-lg shadow-xl justify-center mx-auto mt-2">

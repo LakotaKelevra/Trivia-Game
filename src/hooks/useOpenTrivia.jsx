@@ -4,7 +4,7 @@ function useOpenTrivia(userName, category, level, numberOfQuestions, token) {
     const [trivia, setTrivia] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    console.log(userName, category, level, numberOfQuestions, token);
+    // console.log(userName, category, level, numberOfQuestions, token);
 
     useEffect(() => {
         const params = new URLSearchParams({
@@ -25,22 +25,22 @@ function useOpenTrivia(userName, category, level, numberOfQuestions, token) {
 
         const url = `https://opentdb.com/api.php?${params.toString()}`;
         const now = new Date();
-        console.log(`[OpenTrivia Fetch] ${now.toISOString()} - Fetching:`, url);
+        // console.log(`[OpenTrivia Fetch] ${now.toISOString()} - Fetching:`, url);
 
         fetch(url)
             .then(response => {
-                console.log(`[OpenTrivia Fetch] ${new Date().toISOString()} - Response status:`, response.status);
+                // console.log(`[OpenTrivia Fetch] ${new Date().toISOString()} - Response status:`, response.status);
                 return response.json();
             })
             .then(data => setTrivia(data.results))
             .catch(error => {
-                console.log(`[OpenTrivia Fetch] ${new Date().toISOString()} - Error:`, error);
+                // console.log(`[OpenTrivia Fetch] ${new Date().toISOString()} - Error:`, error);
                 setError(error);
             })
             .finally(() => setLoading(false));
     }, [category, level, numberOfQuestions, token]);
 
-    console.log(trivia);
+    // console.log(trivia);
     
     return { userName, trivia, loading, error };
 }

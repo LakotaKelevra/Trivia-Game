@@ -24,7 +24,7 @@ function useCountdown(initialTime, started, handleSelect, currentIndex) {
     prevTimeRef.current = timeLeft;
   }, [timeLeft, started, handleSelect]);
 
-  console.log("timeLeft", timeLeft);
+  // console.log("timeLeft", timeLeft);
   return timeLeft;
 }
 
