@@ -34,21 +34,21 @@ function Quiz() {
 
 
     return (
-        <div className="container mx-auto p-4 text-center mt-5">
+    <div className="container mx-auto p-2 text-center mt-2 max-w-full overflow-x-hidden">
             {!started && 
             <>
-                <h1 className="text-4xl font-extrabold text-primary mb-6 drop-shadow-lg tracking-wide">Trivia Game: </h1>
-                <h2 className="text-xl font-semibold text-secondary mb-4 tracking-wide">You've selected {numberOfQuestions} questions from {category !== "0" ? category : "various"} categories and {level !== "0" ? level : "mixed"} difficulty level</h2>
+                <h1 className="text-3xl font-extrabold text-primary mb-3 drop-shadow-lg tracking-wide">Trivia Game: </h1>
+                <h2 className="text-lg font-semibold text-secondary mb-2 tracking-wide">You've selected {numberOfQuestions} questions from {category !== "0" ? category : "various"} categories and {level !== "0" ? level : "mixed"} difficulty level</h2>
                 </>
             }
-                <div className="card w-96 bg-base-100 card-lg shadow-sm justify-center mx-auto mt-4">
+                <div className="card w-full sm:max-w-md bg-base-100 card-lg shadow-xl justify-center mx-auto mt-2">
                 {loading && <p>Loading questions...</p>}
                 {error && <p>Error loading questions, please try again.</p>}
 
-                <div className="card-body text-center">
+                <div className="card-body text-center w-full">
                     {!started && (
                         <>
-                            <h2 className="mt-4">Good luck, {userName}!</h2>
+                            <h2 className="mt-2">Good luck, {userName}!</h2>
                             <button className="btn btn-primary" onClick={() => setStarted(true)}>Start Quiz</button>
                         </>
                     )}
@@ -74,8 +74,8 @@ function Quiz() {
 
                     {started && currentIndex >= trivia.length && (
                         <>
-                            <h2 className="mt-4">Quiz Finished!</h2>
-                            <p>Your score: {score} out of {trivia.length * (gameSessionId)}</p>
+                            <h2 className="mt-4 mb-10">Quiz Finished!</h2>
+                            <p className="mb-4">Your score: {score} out of {trivia.length * (gameSessionId)}</p>
                             <button className="btn btn-primary mr-2" onClick={() => {
                                 setCurrentIndex(0);
                                 setStarted(false);

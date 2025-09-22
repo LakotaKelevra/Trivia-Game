@@ -25,12 +25,12 @@ function Home() {
     }
 
     return (
-        <div className="container mx-auto p-4 text-center">
+    <div className="container mx-auto p-4 text-center max-w-full overflow-x-hidden">
             <h1>Welcome to the Trivia Game!</h1>
-            <div className="card w-96 bg-base-100 card-lg shadow-sm justify-center mx-auto mt-4">
+            <div className="card w-full sm:max-w-md bg-base-100 card-lg shadow-xl justify-center mx-auto mt-4">
                 {loading && <p>Loading categories...</p>}
                 {error && <p>Error loading categories, please try again.</p>}
-                <div className="card-body text-center">
+                <div className="card-body text-center w-full">
                     <form onSubmit={handleSubmit}>
                         {/* nome giocatore */}
                         <input type="text" placeholder="Type here your name" className="input input-ghost" value={userName} onChange={(e) => setUserName(e.target.value)}/>
