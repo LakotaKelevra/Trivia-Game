@@ -52,7 +52,7 @@ function Home() {
 
         navigate("/quiz", {
             state: {
-                userName,
+                userName : userName || "Player",
                 category: randomCategory,
                 level: randomLevel,
                 numberOfQuestions: randomNum,
@@ -99,7 +99,7 @@ function Home() {
                                 <option className="hover:!bg-[var(--bluelight)]" value="15">15</option>
                             </select>
 
-                            <button className="btn bg-[var(--blue)] mt-5 w-25 border-0" type="submit" disabled={disabled}>Start! {disabled && <span className="loading loading-dots loading-md"></span>}</button>
+                            <button className="btn bg-[var(--blue)] mt-5 w-25 border-0" type="submit" disabled={disabled}>{!disabled ? "Start!" : <span className="loading loading-dots loading-md"></span>}</button>
                         </form>
 
                         {/* Il nome viene preso dallo userName attuale */}
@@ -109,7 +109,7 @@ function Home() {
                             disabled={disabled}
                             onClick={handleRandomGame}
                         >
-                            Random {disabled && <span className="loading loading-dots loading-md"></span>}
+                             {!disabled ? "Random" : <span className="loading loading-dots loading-md"></span>}
                         </button>
                     </div>
                 </div>

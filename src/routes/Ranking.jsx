@@ -15,24 +15,24 @@ function Ranking() {
     return (
         <div className="container mx-auto p-4 max-w-full overflow-x-auto">
             {console.log(useRanking().ranking)}
-            <h1 className="text-3xl font-extrabold text-primary mb-6 drop-shadow-lg tracking-wide text-center">Ranking</h1>
+            <h1 className="text-3xl font-extrabold mb-6 drop-shadow-lg tracking-wide text-center">Ranking</h1>
             <div className="overflow-x-auto">
                 <div className="w-full max-w-2xl mx-auto">
-                    <div className="flex items-center bg-base-200 text-base-content font-semibold rounded-lg px-4 py-3 mb-2">
-                        <span className="w-8">#</span>
-                        <span className="flex-1 pl-2">Name</span>
-                        <span className="w-28 text-center">Avg. Score</span>
-                        <span className="w-32 text-center">Total Questions</span>
+                    <div className="flex items-center bg-[var(--purpledark)] text-base-content font-semibold rounded-lg px-4 py-3 mb-2">
+                        <span className="w-8"><h3>#</h3></span>
+                        <span className="flex-1 pl-2"><h3>Name</h3></span>
+                        <span className="w-28 text-center"><h3>Avg. Score</h3></span>
+                        <span className="w-40 text-center"><h3>Total Questions</h3></span>
                     </div>
                     {/* Righe dati */}
                     {useRanking().ranking.map((row, idx) => (
-                        <div key={row.name + idx} className="flex items-center bg-base-100 shadow-md rounded-lg my-2 px-4 py-3">
-                            <span className="w-8 font-bold">{idx + 1}</span>
-                            <span className="flex-1 pl-2">{row.name}</span>
-                            <span className="w-28 text-center">{row.displayAvg}</span>
+                        <div key={row.name + idx} className="flex items-center bg-[var(--blue)] shadow-md rounded-lg my-2 px-4 py-3">
+                            <span className="w-8 font-bold"><h3>{idx + 1}</h3></span>
+                            <span className="flex-1 pl-2"><h2>{row.name}</h2></span>
+                            <span className="w-28 text-center"><h3>{row.displayAvg}</h3></span>
                     
 
-                            <span className="w-32 text-center">{row.totalQuestions}</span>
+                            <span className="w-40 text-center"><h3>{row.totalQuestions}</h3></span>
                         </div>
                     ))}
                 </div>

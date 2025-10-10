@@ -12,7 +12,7 @@ function shuffle(array) {
     return arr;
 }
 
-function QuizCard({ userName, numberOfQuestions, loading, error, gameOver, categoryName, level, trivia, onSelect, started, answered, selectedAnswer, currentIndex, setCurrentIndex, gameSessionId, setStarted, score, token, setToken }) {
+function QuizCard({ userName, numberOfQuestions, loading, error, gameOver, categoryName, level, trivia, onSelect, started, answered, selectedAnswer, currentIndex, setCurrentIndex, gameSessionId, setStarted, score, token, setToken, onNextGame }) {
     const question = trivia[currentIndex];
     const shuffledAnswers = useMemo(() => {
         if (!question) return [];
@@ -34,14 +34,14 @@ function QuizCard({ userName, numberOfQuestions, loading, error, gameOver, categ
         <>
             {/* Nickname e domande */}
             <div className="mb-4 bg-[var(--purpledark)] text-[var(--peach)] px-5 py-3 rounded-xl shadow-lg text-start flex items-center justify-between">
-                <div className="mb-2">
+                <div className="my-2">
                     <h2 className="text-lg font-semibold">{userName}</h2>
                     <h2 className="text-lg font-semibold">Question  {currentIndex}/{numberOfQuestions}</h2>
                 </div>
                 <div className="relative flex items-center justify-center me-7 overflow-visible">
                     {/* Cerchio animato, posizionato fuori dal div */}
                     <div className="absolute -top-4 left-1/4 -translate-x-1/6 -translate-y-1/12 z-10">
-                        <CircleAnimation progress={gameOver ? 0 : progress} duration={initialTime}/>
+                        <CircleAnimation progress={gameOver ? 0 : progress} duration={initialTime} />
                     </div>
                     {/* Countdown centrato sopra il cerchio */}
                     <p className="relative z-20 text-3xl font-bold">{gameOver ? '00' : (timeLeft < 10 ? `0${timeLeft}` : timeLeft)}s</p>
@@ -52,8 +52,8 @@ function QuizCard({ userName, numberOfQuestions, loading, error, gameOver, categ
 
             <div className="card-body text-center w-full bg-[var(--peach)] px-5 pb-3 pt-2 rounded-3xl mt-2">
                 {/* Caricamento */}
-            {loading && <p>Loading questions...</p>}
-            {error && <p>Error loading questions, please try again.</p>}
+                {loading && <p>Loading questions...</p>}
+                {error && <p>Error loading questions, please try again.</p>}
                 {/* Pulsante start */}
                 {!started && currentIndex === 0 && (
                     <>
@@ -79,7 +79,7 @@ function QuizCard({ userName, numberOfQuestions, loading, error, gameOver, categ
                                     {decodeHtml(question.question)}
                                 </h2>
                                 <div className="flex flex-col gap-3">
-                                    
+
                                     {shuffledAnswers.map((ans, i) => {
                                         let btnClass = "btn btn-outline w-full whitespace-normal break-words py-3 min-h-[3rem] answer-btn";
 
@@ -116,25 +116,20 @@ function QuizCard({ userName, numberOfQuestions, loading, error, gameOver, categ
                     <>
                         <h2 className="my-4 text-[var(--purpledark)]">Quiz Finished!</h2>
                         <h3 className="mb-4 text-[var(--purpledark)]">Your score: {score} out of {trivia.length * (gameSessionId)}</h3>
-                        <button className="btn bg-[var(--blue)] mr-2" onClick={() => {
-                            setCurrentIndex(0);
-                            setStarted(false);
-                            setToken(null);
-                            setScore(0);
-                            setSelectedAnswer(null);
-                            setAnswered(false);
-                            navigate("/");
-                        }}>Start a new game</button>
-                        <button className="btn bg-[var(--peachdark)] mr-2" onClick={() => {
-                            setToken(token);
-                            setCurrentIndex(0);
-                            setStarted(true);
-                            setSelectedAnswer(null);
-                            setAnswered(false);
-                            setGameSessionId(id => id + 1);
-                            setScore(score);
-                        }}>Go on playing</button>
-
+                        <div className="m-0 p-0 justify-center">
+                            <button className="btn bg-[var(--blue)] mr-2 w-50 mb-2" onClick={() => {
+                                setCurrentIndex(0);
+                                setStarted(false);
+                                setToken(null);
+                                setScore(0);
+                                setSelectedAnswer(null);
+                                setAnswered(false);
+                                navigate("/");
+                            }}>Start a new game</button>
+                            <button className="btn bg-[var(--peachdark)] mr-2 w-50 mb-2" onClick={() => {
+                                onNextGame();
+                            }}>Go on playing</button>
+                        </div>
                     </>
                 )}
             </div>

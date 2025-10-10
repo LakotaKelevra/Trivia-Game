@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 
-function useOpenTrivia(userName, category, level, numberOfQuestions, token) {
+function useOpenTrivia(userName, category, level, numberOfQuestions, token, gameSessionId) {
     const [trivia, setTrivia] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     // console.log(userName, category, level, numberOfQuestions, token);
+
 
     useEffect(() => {
         const params = new URLSearchParams({
@@ -38,11 +39,11 @@ function useOpenTrivia(userName, category, level, numberOfQuestions, token) {
                 setError(error);
             })
             .finally(() => setLoading(false));
-    }, [category, level, numberOfQuestions, token]);
+    }, [category, level, numberOfQuestions, token, gameSessionId]);
 
     // console.log(trivia);
     
-    return { userName, trivia, loading, error };
+    return { trivia, loading, error };
 }
 
 export default useOpenTrivia;

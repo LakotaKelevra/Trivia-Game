@@ -4,9 +4,9 @@ const LS_KEY = "trivia_ranking";
 
 function useRanking() {
     const [ranking, setRanking] = useState([
-        { token: 'abc123', name: 'Player1', score: 4, totalQuestions: 5, avg: 0.8 },
-        { token: 'def456', name: 'Player2', score: 3, totalQuestions: 5, avg: 0.6 },
-        { token: 'ghi789', name: 'Player3', score: 5, totalQuestions: 5, avg: 1.0 }
+        { token: 'ghi789', name: 'Player3', score: 5, totalQuestions: 5, avg: 1.0, displayAvg: 100 },
+        { token: 'abc123', name: 'Player1', score: 4, totalQuestions: 5, avg: 0.8, displayAvg: 80 },
+        { token: 'def456', name: 'Player2', score: 3, totalQuestions: 5, avg: 0.6, displayAvg: 60 }
     ]);
 
     // Carica la classifica da localStorage all'inizio

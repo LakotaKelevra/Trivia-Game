@@ -79,3 +79,17 @@ select, input {
   box-shadow: none !important;
   background-color: var(--purple) !important;
 }
+
+button:disabled {
+  background-color: var(--yellow);
+  color: var(--peachdark);
+  cursor: not-allowed;
+  opacity: 0.7;
+  /* altri stili che vuoi applicare */
+}
+
+.icon img {
+  width: 50px;
+  height: 50px;
+}
+
