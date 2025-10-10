@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar";
 
 function Layout() {
     return (
-        <div data-theme="dark">
+        <div className="min-h-screen flex flex-col bg-[var(--purple)] text-[var(--peach)] px-5">
             <Navbar />
             <Outlet />
         </div>

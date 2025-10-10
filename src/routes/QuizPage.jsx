@@ -5,6 +5,7 @@ import QuestionCard from "../components/QuestionCard";
 import CircleAnimation from "../components/CircleAnimation";
 import useOpenTrivia from "../hooks/useOpenTrivia";
 import useRanking from "../hooks/useRanking";
+import QuizCard from "../components/QuizCard";
 
 function Quiz() {
     const location = useLocation();
@@ -16,7 +17,7 @@ function Quiz() {
         if (!userName || !category || !level || !numberOfQuestions) {
             navigate("/", { replace: true });
         }
-    }, [userName, category, level, numberOfQuestions, navigate]);
+    }, [userName, category, level, numberOfQuestions]);
 
     // Se non ci sono nello state, prova a recuperarli dalla sessione
     if (!userName || !category || !level || !numberOfQuestions || !categoryName) {
@@ -33,15 +34,22 @@ function Quiz() {
         }
     }
 
-    // Se ancora mancano, redirect (opzionale: puoi aggiungere un redirect automatico qui)
 
-    // Salva i dati in sessionStorage quando disponibili
+    // Salva i dati in localStorage quando disponibili
     if (userName && category && level && numberOfQuestions && categoryName) {
-        sessionStorage.setItem("quizData", JSON.stringify({ userName, category, level, numberOfQuestions, categoryName }));
+        localStorage.setItem("quizData", JSON.stringify({ userName, category, level, numberOfQuestions, categoryName }));
     }
     const [token, setToken] = useState(null);
     const [gameSessionId, setGameSessionId] = useState(1);
     const { trivia, loading, error } = useOpenTrivia(userName, category, level, numberOfQuestions, token);
+
+    // Salva le domande (trivia) in localStorage quando vengono caricate
+    useEffect(() => {
+        if (trivia && trivia.length > 0) {
+            localStorage.setItem("quizTrivia", JSON.stringify(trivia));
+        }
+    }, [trivia]);
+
     const [currentIndex, setCurrentIndex] = useState(0);
     const [selectedAnswer, setSelectedAnswer] = useState(null);
     const [answered, setAnswered] = useState(false);
@@ -53,6 +61,7 @@ function Quiz() {
 
     const handleAnswer = useCallback((answer) => {
         const current = trivia[currentIndex];
+        if (!current) return; // Evita errori se il round è finito
         setAnswered(true);
         setSelectedAnswer(answer);
         if (answer === current.correct_answer) {
@@ -94,80 +103,38 @@ function Quiz() {
 
     return (
         <div className="container mx-auto p-2 text-center mt-2 max-w-full overflow-x-hidden">
-            <h1 className="text-3xl font-extrabold text-center my-5">TRIVIA GAME</h1>
-
-            {/* Nickname e domande */}
-            <div className="mb-4 bg-[var(--purpledark)] text-[var(--peach)] px-5 py-3 rounded-xl shadow-lg text-start">
-                <h2 className="text-lg font-semibold">Nickname: {userName}</h2>
-                <h2 className="text-lg font-semibold">Questions: {currentIndex}/{numberOfQuestions}</h2>
-                <CircleAnimation />
-            </div>
-            {/* {!started &&
-                <>
-                    <h2 className="text-lg font-semibold text-[var(--peachdark)] my-2 tracking-wide px-5 pb-3">You've selected {numberOfQuestions} questions from {categoryName || (category !== "0" ? category : "various")} categories and {level !== "0" ? level : "mixed"} difficulty level</h2>
-                </>
-            } */}
+            <h1 className="text-3xl font-extrabold text-center my-5">TRIVIA GAME</h1>       
             <div className="card w-full sm:max-w-md card-lg shadow-xl justify-center mx-auto mt-2">
-                {loading && <p>Loading questions...</p>}
-                {error && <p>Error loading questions, please try again.</p>}
-
-                <div className="card-body text-center w-full bg-[var(--peach)] px-5 pb-3 pt-2 rounded-3xl">
-                    {!started && currentIndex === 0 && (
-                        <>
-                            <h2 className="text-lg font-semibold text-[var(--purpledark)] my-2 tracking-wide px-5">You've selected {numberOfQuestions} questions from {categoryName || (category !== "0" ? category : "various")} and {level !== "0" ? level : "mixed"} difficulty level</h2>
-                            <h2 className="text-lg font-semibold text-[var(--purpledark)] my-2 tracking-wide px-5">Good luck, {userName}!</h2>
-                            <button className="btn bg-[var(--blue)] w-25 mx-auto" onClick={() => setStarted(true)}>Start!</button>
-                        </>
-                    )}
-                    <AnimatePresence mode="wait">
-                        {started && currentIndex < trivia.length && (
-                            <QuestionCard
+                
+                    
+                            <QuizCard
+                                userName={userName}
+                                numberOfQuestions={numberOfQuestions}
+                                loading={loading}
+                                error={error}
+                                gameOver={gameOver}
+                                categoryName={categoryName}
+                                level={level}
                                 key={gameSessionId + '-' + currentIndex}
-                                question={trivia[currentIndex].question}
-                                answers={[
-                                    trivia[currentIndex].correct_answer,
-                                    ...trivia[currentIndex].incorrect_answers
-                                ]}
-                                correctAnswer={trivia[currentIndex].correct_answer}
+                                trivia={trivia}
                                 onSelect={handleAnswer}
                                 started={started}
+                                setStarted={setStarted}
                                 answered={answered}
                                 selectedAnswer={selectedAnswer}
                                 currentIndex={currentIndex}
+                                setCurrentIndex={setCurrentIndex}
                                 gameSessionId={gameSessionId}
+                                score={score}
+                                token={token}
+                                setToken={setToken}
                             />
-                        )}
-                    </AnimatePresence>
+                     
 
-                    {started && currentIndex >= trivia.length && gameOver && (
-                        <>
-                            <h2 className="mt-4 mb-10">Quiz Finished!</h2>
-                            <p className="mb-4">Your score: {score} out of {trivia.length * (gameSessionId)}</p>
-                            <button className="btn btn-primary mr-2" onClick={() => {
-                                setCurrentIndex(0);
-                                setStarted(false);
-                                setToken(null);
-                                setScore(0);
-                                setSelectedAnswer(null);
-                                setAnswered(false);
-                                navigate("/");
-                            }}>Start a new game</button>
-                            <button className="btn btn-secondary mr-2" onClick={() => {
-                                setToken(token);
-                                setCurrentIndex(0);
-                                setStarted(true);
-                                setSelectedAnswer(null);
-                                setAnswered(false);
-                                setGameSessionId(id => id + 1);
-                                setScore(score);
-                            }}>Go on playing</button>
-
-                        </>
-                    )}
 
                 </div>
             </div>
-        </div>
+        
     );
 }
 

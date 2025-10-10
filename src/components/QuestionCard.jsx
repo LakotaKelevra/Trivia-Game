@@ -30,7 +30,7 @@ function QuestionCard({ question, answers, onSelect, correctAnswer, started, ans
             
         >
             
-                <div className="card-body">
+                <div className="card-body bg-[var(--peach)] text-[var(--purpledark)]">
                     <h2 className="card-title text-xl">
                         {decodeHtml(question)}
                     </h2>

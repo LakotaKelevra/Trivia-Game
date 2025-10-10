@@ -26,7 +26,7 @@ function Ranking() {
                     </div>
                     {/* Righe dati */}
                     {useRanking().ranking.map((row, idx) => (
-                        <div key={row.name} className="flex items-center bg-base-100 shadow-md rounded-lg my-2 px-4 py-3">
+                        <div key={row.name + idx} className="flex items-center bg-base-100 shadow-md rounded-lg my-2 px-4 py-3">
                             <span className="w-8 font-bold">{idx + 1}</span>
                             <span className="flex-1 pl-2">{row.name}</span>
                             <span className="w-28 text-center">{row.displayAvg}</span>

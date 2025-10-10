@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 function Home() {
     const { categories, loading, error } = useCategories();
-    const [userName, setUserName] = useState('Player');
+    const [userName, setUserName] = useState('');
     const [category, setCategory] = useState('0');
     const [level, setLevel] = useState('0');
     const [numberOfQuestions, setNumberOfQuestions] = useState('5');
@@ -20,54 +20,98 @@ function Home() {
     const handleSubmit = (event) => {
         event.preventDefault();
         let categoryName = "All categories";
+        const finalUserName = userName || "Player";
         if (category !== "0") {
             const found = categories.find(cat => String(cat.id) === String(category));
             if (found) categoryName = found.name;
         }
+        console.log("Quiz params (handleSubmit):", { finalUserName, category, level, numberOfQuestions, categoryName });
+
         navigate("/quiz", {
-            state: { userName, category, level, numberOfQuestions, categoryName }
+            state: { userName: finalUserName, category, level, numberOfQuestions, categoryName }
         });
     }
 
+    const handleRandomGame = (event) => {
+        event.preventDefault();
+        if (!userName) setUserName("Player");
+
+        // Scegli categoria casuale tra quelle disponibili
+        let randomCategory = "0";
+        let categoryName = "All categories";
+        if (categories.length > 0) {
+            const randomCat = categories[Math.floor(Math.random() * categories.length)];
+            randomCategory = String(randomCat.id);
+            categoryName = randomCat.name;
+        }
+        const levels = ["easy", "medium", "hard"];
+        const nums = ["5", "10", "15"];
+        const randomLevel = levels[Math.floor(Math.random() * levels.length)];
+        const randomNum = nums[Math.floor(Math.random() * nums.length)];
+        console.log("Quiz params (handleRandomGame):", { userName, category, level, numberOfQuestions, categoryName });
+
+        navigate("/quiz", {
+            state: {
+                userName,
+                category: randomCategory,
+                level: randomLevel,
+                numberOfQuestions: randomNum,
+                categoryName
+            }
+        });
+    };
+
     return (
-    <div className="container mx-auto p-4 text-center max-w-full overflow-x-hidden">
-            <h1>Welcome to the Trivia Game!</h1>
-            <div className="card w-full sm:max-w-md bg-base-100 card-lg shadow-xl justify-center mx-auto mt-4">
+        <div className="container mx-auto p-4 text-center max-w-full overflow-x-hidden">
+            <h1 className="text-3xl font-extrabold text-center my-5">WELCOME TO THE <br /> TRIVIA GAME</h1>
+            <div className="card w-full sm:max-w-md  card-lg shadow-xl justify-center mx-auto mt-4">
                 {loading && <p>Loading categories...</p>}
                 {error && <p>Error loading categories, please try again.</p>}
-                <div className="card-body text-center w-full">
-                    <form onSubmit={handleSubmit}>
-                        {/* nome giocatore */}
-                        <input type="text" placeholder="Type here your name" className="input input-ghost" value={userName} onChange={(e) => setUserName(e.target.value)}/>
+                <div className="card-body text-center w-full bg-[var(--peachdark)] text-[var(--purpledark)] px-0 pb-1 pt-2 rounded-3xl ">
+                    <h2 className="text-2xl font-bold text-center">Get Ready!</h2>
+                    <div className="w-full min-w-full block bg-[var(--peach)] p-4 rounded-3xl">
+                        <form onSubmit={handleSubmit}>
+                            {/* nome giocatore */}
+                            <input type="text" placeholder="Type here your name" className="input !bg-[var(--yellow)] focus:!bg-[var(--bluelight)] hover:!bg-[var(--yellow)] mb-2" value={userName} maxLength="24"  onChange={(e) => setUserName(e.target.value)} />
 
-                        {/* selezione categoria */}
-                        <select className="select select-ghost " value={category}
-              onChange={(e) => setCategory(e.target.value)}>
-                            <option value="0">All categories</option>
-                            {categories.map((cat) => (
-                                <option key={cat.id} value={cat.id}>{cat.name}</option>
-                            ))}
-                        </select>
+                            {/* selezione categoria */}
+                            <select className="select bg-[var(--yellow)] mb-2" value={category}
+                                onChange={(e) => setCategory(e.target.value)}>
+                                <option className="hover:!bg-[var(--bluelight)]" value="0" >All categories</option>
+                                {categories.map((cat) => (
+                                    <option className="hover:!bg-[var(--bluelight)]" key={cat.id} value={cat.id}>{cat.name}</option>
+                                ))}
+                            </select>
 
-                        {/* selezione livello */}
-                        <select className="select select-ghost"
-                        value={level} onChange={(e) => setLevel(e.target.value)}>
-                            <option value="0">All levels</option>
-                            <option value="easy">Easy</option>
-                            <option value="medium">Medium</option>
-                            <option value="hard">Hard</option>
-                        </select>
+                            {/* selezione livello */}
+                            <select className="select bg-[var(--yellow)] mb-2"
+                                value={level} onChange={(e) => setLevel(e.target.value)}>
+                                <option className="hover:!bg-[var(--bluelight)]" value="0">All levels</option>
+                                <option className="hover:!bg-[var(--bluelight)]" value="easy">Easy</option>
+                                <option className="hover:!bg-[var(--bluelight)]" value="medium">Medium</option>
+                                <option className="hover:!bg-[var(--bluelight)]" value="hard">Hard</option>
+                            </select>
 
-                        {/* Numero di domande */}
-                        <select className="select select-ghost" value={numberOfQuestions} onChange={(e) => setNumberOfQuestions(e.target.value)}>
-                            <option value="5">5</option>
-                            <option value="10">10</option>
-                            <option value="15">15</option>
-                        </select>
+                            {/* Numero di domande */}
+                            <select className="select bg-[var(--yellow)] mb-2" value={numberOfQuestions} onChange={(e) => setNumberOfQuestions(e.target.value)}>
+                                <option className="hover:!bg-[var(--bluelight)]" value="5">5</option>
+                                <option className="hover:!bg-[var(--bluelight)]" value="10">10</option>
+                                <option className="hover:!bg-[var(--bluelight)]" value="15">15</option>
+                            </select>
 
-                        <button className="btn btn-primary mt-5" type="submit" disabled={disabled}>Start Game {disabled && <span className="loading loading-dots loading-md"></span>}</button>
-                        
-                    </form>
+                            <button className="btn bg-[var(--blue)] mt-5 w-25 border-0" type="submit" disabled={disabled}>Start! {disabled && <span className="loading loading-dots loading-md"></span>}</button>
+                        </form>
+
+                        {/* Il nome viene preso dallo userName attuale */}
+                        <button
+                            className="btn bg-[var(--peachdark)] border-0 mt-2 w-25"
+                            type="button"
+                            disabled={disabled}
+                            onClick={handleRandomGame}
+                        >
+                            Random {disabled && <span className="loading loading-dots loading-md"></span>}
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

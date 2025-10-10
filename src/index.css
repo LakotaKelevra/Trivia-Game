@@ -1,3 +1,81 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
+:root {
+  --purplelight: #d7cbf7;
+  --purple: #7e56e6;
+  --purpledark: #392767;
+  --purplelight: #f2eefd;
+  --peach: #fecdc3;
+  --peachdark: #ff977c;
+  --blue: #2c4092;
+  --bluelight: #edf0fe;
+  --yellow: #ffebbd;
+}
+
+.btn {
+  border: none !important;
+  border-radius: 10px !important;
+}
+
+
+h1 {
+  font-family: "Baloo 2", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 800;
+  font-style: normal;
+  font-size: 40px;
+  line-height: 100%;
+  letter-spacing: 0;
+  
+}
+
+h2, button {
+  font-family: "Baloo 2", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 800;
+  font-style: normal;
+  font-size: 20px;
+  line-height: 100%;
+  letter-spacing: 0;
+  
+}
+
+h3 {
+  font-family: "Baloo 2", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 200;
+  font-style: normal;
+  font-size: 20px;
+  line-height: 100%;
+  letter-spacing: 0;
+  
+}
+
+select, input {
+  font-family: "Baloo 2", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 200;
+  font-style: normal;
+  font-size: 20px;
+  line-height: 100%;
+  letter-spacing: 0;
+  
+}
+
+.answer-btn {
+  font-family: "Baloo 2", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 18px;
+  line-height: 100%;
+  letter-spacing: 0;
+  
+}
+
+.answer-btn:hover {
+  outline: none !important;
+  box-shadow: none !important;
+  background-color: var(--purple) !important;
+}
