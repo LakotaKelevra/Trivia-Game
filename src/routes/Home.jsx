@@ -63,7 +63,7 @@ function Home() {
 
     return (
         <div className="container mx-auto p-4 text-center max-w-full overflow-x-hidden">
-            <h1 className="text-3xl font-extrabold text-center my-5">WELCOME TO THE <br /> TRIVIA GAME</h1>
+            <h1 className="text-3xl font-extrabold text-center mb-5">WELCOME TO THE <br /> TRIVIA GAME</h1>
             <div className="card w-full sm:max-w-md  card-lg shadow-xl justify-center mx-auto mt-4">
                 {loading && <p>Loading categories...</p>}
                 {error && <p>Error loading categories, please try again.</p>}
@@ -72,7 +72,7 @@ function Home() {
                     <div className="w-full min-w-full block bg-[var(--peach)] p-4 rounded-3xl">
                         <form onSubmit={handleSubmit}>
                             {/* nome giocatore */}
-                            <input type="text" placeholder="Type here your name" className="input !bg-[var(--yellow)] focus:!bg-[var(--bluelight)] hover:!bg-[var(--yellow)] mb-2" value={userName} maxLength="24"  onChange={(e) => setUserName(e.target.value)} />
+                            <input type="text" placeholder="Type here your name" className="input !bg-[var(--yellow)] focus:!bg-[var(--bluelight)] hover:!bg-[var(--yellow)] mb-2" value={userName} maxLength="16"  onChange={(e) => setUserName(e.target.value)} />
 
                             {/* selezione categoria */}
                             <select className="select bg-[var(--yellow)] mb-2" value={category}

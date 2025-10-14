@@ -20,5 +20,6 @@ Trivia Game è un'applicazione web sviluppata in React che permette di giocare a
 - [Framer Motion](https://www.framer.com/motion/)
 - [Open Trivia DB API](https://opentdb.com/)
 
-
+## Collaboration
+- **Cristina Fioroni** - UX/UI designer
 

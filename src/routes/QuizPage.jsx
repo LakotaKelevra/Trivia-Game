@@ -6,11 +6,14 @@ import CircleAnimation from "../components/CircleAnimation";
 import useOpenTrivia from "../hooks/useOpenTrivia";
 import useRanking from "../hooks/useRanking";
 import QuizCard from "../components/QuizCard";
+import { div } from "framer-motion/client";
+import Ready from "../components/Ready";
 
 function Quiz() {
+    const [ready, setReady] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
-    
+
     // Recupera i dati da location.state o sessionStorage
     let { userName, category, level, numberOfQuestions, categoryName } = location.state || {};
     // Redirect automatico se i dati non sono presenti
@@ -42,7 +45,7 @@ function Quiz() {
     }
     const [token, setToken] = useState(null);
     const [gameSessionId, setGameSessionId] = useState(1);
-    const { trivia, loading, error } = useOpenTrivia(userName, category, level, numberOfQuestions, token, gameSessionId);
+    const { trivia, loading, error } = useOpenTrivia(userName, category, level, numberOfQuestions, token, gameSessionId, setReady);
 
     // Salva le domande (trivia) in localStorage quando vengono caricate
     useEffect(() => {
@@ -88,7 +91,7 @@ function Quiz() {
 
     // Ritarda la visualizzazione del blocco Game Over di 1 secondo
     useEffect(() => {
-        if (currentIndex >= trivia.length && started) {
+        if (Array.isArray(trivia) && trivia.length > 0 && currentIndex >= trivia.length && started) {
             const t = setTimeout(() => setGameOver(true), 1000);
             const fetchTokenAndSave = async () => {
                 if (!token) {
@@ -111,42 +114,53 @@ function Quiz() {
         }
     }, [currentIndex, started]);
 
-
+    // Ready è diventa true al termine del caricamento delle domande
+    useEffect(() => {
+        console.log("Ready = false");
+        setReady(false);
+    }, [gameSessionId]);
 
 
 
     return (
-        <div className="container mx-auto p-2 text-center mt-2 max-w-full overflow-x-hidden overflow-y-hidden">
-            <h1 className="text-3xl font-extrabold text-center my-5">TRIVIA GAME</h1>
+        <div className="container mx-auto p-2 px-5 text-center max-w-full overflow-x-hidden overflow-y-hidden">
+            <h1 className="text-3xl font-extrabold text-center mb-5">TRIVIA GAME</h1>
             <div className="card w-full sm:max-w-md card-lg shadow-xl justify-center mx-auto mt-2">
-
-
-                <QuizCard
-                    userName={userName}
-                    numberOfQuestions={numberOfQuestions}
-                    loading={loading}
-                    error={error}
-                    gameOver={gameOver}
-                    categoryName={categoryName}
-                    level={level}
-                    key={gameSessionId + '-' + currentIndex}
-                    trivia={trivia}
-                    onSelect={handleAnswer}
-                    started={started}
-                    setStarted={setStarted}
-                    answered={answered}
-                    selectedAnswer={selectedAnswer}
-                    currentIndex={currentIndex}
-                    setCurrentIndex={setCurrentIndex}
-                    gameSessionId={gameSessionId}
-                    score={score}
-                    token={token}
-                    setToken={setToken}
-                    onNextGame={handleNextGame}
-                />
+                {(!ready || loading) && (
+                    <Ready />
+                )}
+                {ready && (
+                    <QuizCard
+                        userName={userName}
+                        numberOfQuestions={numberOfQuestions}
+                        loading={loading}
+                        error={error}
+                        gameOver={gameOver}
+                        category={category}
+                        categoryName={categoryName}
+                        level={level}
+                        key={gameSessionId + '-' + currentIndex}
+                        trivia={trivia}
+                        onSelect={handleAnswer}
+                        started={started}
+                        setStarted={setStarted}
+                        answered={answered}
+                        setAnswered={setAnswered}
+                        selectedAnswer={selectedAnswer}
+                        setSelectedAnswer={setSelectedAnswer}
+                        currentIndex={currentIndex}
+                        setCurrentIndex={setCurrentIndex}
+                        gameSessionId={gameSessionId}
+                        score={score}
+                        setScore={setScore}
+                        token={token}
+                        setToken={setToken}
+                        onNextGame={handleNextGame}
+                        ready={ready}
+                    />
+                )}
             </div>
         </div>
-
     );
 }
 

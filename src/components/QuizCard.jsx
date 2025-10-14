@@ -1,7 +1,9 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import useCountdown from "../hooks/useCountdown";
 import CircleAnimation from "./CircleAnimation";
+import Ready from "./Ready";
 
 function shuffle(array) {
     const arr = [...array];
@@ -12,8 +14,9 @@ function shuffle(array) {
     return arr;
 }
 
-function QuizCard({ userName, numberOfQuestions, loading, error, gameOver, categoryName, level, trivia, onSelect, started, answered, selectedAnswer, currentIndex, setCurrentIndex, gameSessionId, setStarted, score, token, setToken, onNextGame }) {
-    const question = trivia[currentIndex];
+function QuizCard({ userName, numberOfQuestions, loading, error, gameOver, categoryName, category, level, trivia, onSelect, started, answered, setAnswered, selectedAnswer, setSelectedAnswer, currentIndex, setCurrentIndex, gameSessionId, setStarted, score, setScore, setToken, onNextGame, ready }) {
+    const navigate = useNavigate();
+    const question = trivia && trivia.length > 0 ? trivia[currentIndex] : null;
     const shuffledAnswers = useMemo(() => {
         if (!question) return [];
         return shuffle([question.correct_answer, ...question.incorrect_answers]);
@@ -53,7 +56,10 @@ function QuizCard({ userName, numberOfQuestions, loading, error, gameOver, categ
             <div className="card-body text-center w-full bg-[var(--peach)] px-5 pb-3 pt-2 rounded-3xl mt-2">
                 {/* Caricamento */}
                 {loading && <p>Loading questions...</p>}
-                {error && <p>Error loading questions, please try again.</p>}
+                {error && <>
+                    <p>Error loading questions, please try again.</p>
+                    <button className="btn bg-[var(--peachdark)] mt-2" onClick={() => navigate(-1)}>Back</button>
+                </>}
                 {/* Pulsante start */}
                 {!started && currentIndex === 0 && (
                     <>
@@ -65,7 +71,10 @@ function QuizCard({ userName, numberOfQuestions, loading, error, gameOver, categ
 
                 {/* Quiz Card */}
                 <AnimatePresence mode="wait">
-                    {started && currentIndex < trivia.length && (
+                    {!ready && !loading && (
+                        <Ready />
+                    )}
+                    {started && trivia && Array.isArray(trivia) && trivia.length > 0 && currentIndex < trivia.length && ready && (
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
@@ -112,7 +121,7 @@ function QuizCard({ userName, numberOfQuestions, loading, error, gameOver, categ
                 </AnimatePresence>
 
                 {/* Game over */}
-                {started && currentIndex >= trivia.length && gameOver && (
+                {started && Array.isArray(trivia) && trivia.length > 0 && currentIndex >= trivia.length && gameOver && (
                     <>
                         <h2 className="my-4 text-[var(--purpledark)]">Quiz Finished!</h2>
                         <h3 className="mb-4 text-[var(--purpledark)]">Your score: {score} out of {trivia.length * (gameSessionId)}</h3>
