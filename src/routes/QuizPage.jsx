@@ -92,23 +92,23 @@ function Quiz() {
     // Ritarda la visualizzazione del blocco Game Over di 1 secondo
     useEffect(() => {
         if (Array.isArray(trivia) && trivia.length > 0 && currentIndex >= trivia.length && started) {
-            const t = setTimeout(() => setGameOver(true), 1000);
+            setGameOver(true);
             const fetchTokenAndSave = async () => {
                 if (!token) {
                     try {
                         const result = await fetch('https://opentdb.com/api_token.php?command=request');
                         const data = await result.json();
-                        setToken(data.token);
-
                         // usa il token appena ricevuto
+                        setToken(data.token);
+                        addRecord(data.token, userName, score, numberOfQuestions * gameSessionId);
                     } catch (err) {
                         console.error(err);
                     }
+                } else {
+                    addRecord(token, userName, score, numberOfQuestions * gameSessionId);
                 }
-                addRecord(token, userName, score, numberOfQuestions * gameSessionId);
             };
-            fetchTokenAndSave();
-            return () => clearTimeout(t);
+            fetchTokenAndSave();            
         } else {
             setGameOver(false);
         }

@@ -39,7 +39,7 @@ function QuizCard({ userName, numberOfQuestions, loading, error, gameOver, categ
             <div className="mb-4 bg-[var(--purpledark)] text-[var(--peach)] px-5 py-3 rounded-xl shadow-lg text-start flex items-center justify-between">
                 <div className="my-2">
                     <h2 className="text-lg font-semibold">{userName}</h2>
-                    <h2 className="text-lg font-semibold">Question  {currentIndex}/{numberOfQuestions}</h2>
+                    <h2 className="text-lg font-semibold">Question  {currentIndex+1>numberOfQuestions ? numberOfQuestions : currentIndex + 1}/{numberOfQuestions}</h2>
                 </div>
                 <div className="relative flex items-center justify-center me-7 overflow-visible">
                     {/* Cerchio animato, posizionato fuori dal div */}
