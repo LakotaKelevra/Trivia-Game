@@ -11,9 +11,10 @@ function Home() {
     const navigate = useNavigate();
     const [disabled, setDisabled] = useState(true);
 
-    // Abilita il pulsante dopo 5 secondi dal mount
+    // Abilita il pulsante dopo 3 secondi dal mount per dar tempo all'API di rispondere
+    // questo controllo è deprecato a seguito del div di loading delle domande, in test
     useEffect(() => {
-        const timer = setTimeout(() => setDisabled(false), 5000);
+        const timer = setTimeout(() => setDisabled(false));
         return () => clearTimeout(timer);
     }, []);
 
@@ -99,12 +100,14 @@ function Home() {
                                 <option className="hover:!bg-[var(--bluelight)]" value="15">15</option>
                             </select>
 
-                            <button className="btn bg-[var(--blue)] mt-5 w-25 border-0" type="submit" disabled={disabled}>{!disabled ? "Start!" : <span className="loading loading-dots loading-md"></span>}</button>
+                            <button className="btn bg-[var(--blue)] mt-5 w-25 border-0" type="submit" disabled={disabled}>
+                                {!disabled ? "Start!" : <span className="loading loading-dots loading-md"></span>}
+                                </button>
                         </form>
 
                         {/* Il nome viene preso dallo userName attuale */}
                         <button
-                            className="btn bg-[var(--peachdark)] border-0 mt-2 w-25"
+                            className="btn bg-[var(--blue)] border-0 mt-2 w-25"
                             type="button"
                             disabled={disabled}
                             onClick={handleRandomGame}

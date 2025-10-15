@@ -1,12 +1,8 @@
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useState, useCallback, useEffect } from "react";
-import { AnimatePresence } from "framer-motion";
-import QuestionCard from "../components/QuestionCard";
-import CircleAnimation from "../components/CircleAnimation";
 import useOpenTrivia from "../hooks/useOpenTrivia";
 import useRanking from "../hooks/useRanking";
 import QuizCard from "../components/QuizCard";
-import { div } from "framer-motion/client";
 import Ready from "../components/Ready";
 
 function Quiz() {

@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useMemo, useState } from "react";
+import { use, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useCountdown from "../hooks/useCountdown";
 import CircleAnimation from "./CircleAnimation";
@@ -22,7 +22,7 @@ function QuizCard({ userName, numberOfQuestions, loading, error, gameOver, categ
         return shuffle([question.correct_answer, ...question.incorrect_answers]);
     }, [question, currentIndex, gameSessionId]);
 
-    const initialTime = 15; // modificare qui se si vuole cambiare il tempo
+    const initialTime = 15; // modificare qui se si vuole cambiare il tempo per ciascuna domanda
     const timeLeft = useCountdown(initialTime, started, () => onSelect(null), currentIndex);
     const progress = (initialTime - timeLeft) / initialTime;
 
@@ -123,8 +123,21 @@ function QuizCard({ userName, numberOfQuestions, loading, error, gameOver, categ
                 {/* Game over */}
                 {started && Array.isArray(trivia) && trivia.length > 0 && currentIndex >= trivia.length && gameOver && (
                     <>
-                        <h2 className="my-4 text-[var(--purpledark)]">Quiz Finished!</h2>
-                        <h3 className="mb-4 text-[var(--purpledark)]">Your score: {score} out of {trivia.length * (gameSessionId)}</h3>
+                        <h2 className="mt-4 text-[var(--purple)] text-3xl!">GAME OVER!</h2>
+                        <h3 className="my-2 text-[var(--purple)]">{userName}</h3>
+                        <div className="mb-1">
+                            <h2 className="mb-1 text-[var(--purpledark)]">Your score</h2>
+                            <h2 className="mb-1 text-[var(--purple)]">{score}</h2>
+                        </div>
+
+                        <div  className="mb-1">
+                            <h2 className="mb-1 text-[var(--purpledark)]">Correct answers</h2>
+                            <h2 className="mb-1 text-[var(--purple)]">{score}/{trivia.length * (gameSessionId)}</h2>
+                        </div>
+                        <div className="my-2">
+                            <h2 className="text-[var(--purpledark)] text-2xl!">{trivia.length * (gameSessionId)/score>3 ? "You're a trivia master!" : "Great job!"}</h2>
+                        </div>
+                        {/* <h3 className="mb-4 text-[var(--purpledark)]">Your score: {score} out of {trivia.length * (gameSessionId)}</h3> */}
                         <div className="m-0 p-0 justify-center">
                             <button className="btn bg-[var(--blue)] mr-2 w-50 mb-2" onClick={() => {
                                 setCurrentIndex(0);
@@ -135,7 +148,7 @@ function QuizCard({ userName, numberOfQuestions, loading, error, gameOver, categ
                                 setAnswered(false);
                                 navigate("/");
                             }}>Start a new game</button>
-                            <button className="btn bg-[var(--peachdark)] mr-2 w-50 mb-2" onClick={() => {
+                            <button className="btn bg-[var(--blue)] mr-2 w-50 mb-2" onClick={() => {
                                 onNextGame();
                             }}>Go on playing</button>
                         </div>

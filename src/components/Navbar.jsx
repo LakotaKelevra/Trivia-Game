@@ -15,7 +15,7 @@ function Navbar() {
             <div className="flex-none m-2 me-2 ">
                     {path == "/" && (
                         <Link to="/ranking" className="icon flex items-center gap-2">
-                            <h2 className="">Ranking</h2>
+                        
                             <img src={Ranking} alt="Ranking" />
                         </Link>
                     )}

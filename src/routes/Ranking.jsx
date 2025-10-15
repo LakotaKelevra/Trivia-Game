@@ -12,30 +12,35 @@ const mockRanking = [
 
 
 function Ranking() {
+    const ranking = useRanking().ranking;
     return (
-        <div className="container mx-auto p-4 max-w-full overflow-x-auto">
-            {console.log(useRanking().ranking)}
-            <h1 className="text-3xl font-extrabold mb-6 drop-shadow-lg tracking-wide text-center">Ranking</h1>
-            <div className="overflow-x-auto">
-                <div className="w-full max-w-2xl mx-auto">
-                    <div className="flex items-center bg-[var(--purpledark)] text-base-content font-semibold rounded-lg px-4 py-3 mb-2">
-                        <span className="w-8"><h3>#</h3></span>
-                        <span className="flex-1 pl-2"><h3>Name</h3></span>
-                        <span className="w-28 text-center"><h3>Avg. Score</h3></span>
-                        <span className="w-40 text-center"><h3>Total Questions</h3></span>
-                    </div>
-                    {/* Righe dati */}
-                    {useRanking().ranking.map((row, idx) => (
-                        <div key={row.name + idx} className="flex items-center bg-[var(--blue)] shadow-md rounded-lg my-2 px-4 py-3">
-                            <span className="w-8 font-bold"><h3>{idx + 1}</h3></span>
-                            <span className="flex-1 pl-2"><h2>{row.name}</h2></span>
-                            <span className="w-28 text-center"><h3>{row.displayAvg}</h3></span>
-                    
-
-                            <span className="w-40 text-center"><h3>{row.totalQuestions}</h3></span>
-                        </div>
-                    ))}
-                </div>
+        <div className="container mx-auto px-2 w-full overflow-x-auto">
+            <h1 className="text-3xl font-extrabold mb-6 tracking-wide text-center ">Ranking</h1>
+            <div className="block sm:w-full md:w-1/2 px-2 mx-auto">
+                <table className="min-w-full table-auto border-separate border-spacing-y-4 rounded-3xl overflow-hidden mx-auto">
+                    <thead>
+                        <tr className="bg-[var(--peach)] rounded-3xl text-[var(--purpledark)] ">
+                            <th className="px-2 py-3 text-left font-semibold rounded-l-full ">#</th>
+                            <th className="px-2 py-3 text-left font-semibold max-w-[120px] truncate">Name</th>
+                            <th className="px-2 py-3 text-center font-semibold">Score</th>
+                            <th className="px-2 py-3 text-center font-semibold rounded-r-full">Questions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {ranking.map((row, idx) => (
+                            <tr
+                                key={row.name + idx}
+                                className="bg-[var(--yellow)] rounded-3xl shadow-md hover:bg-[var(--peach)] transition"
+                                style={{ boxShadow: "0 2px 8px 0 rgba(0,0,0,0.04)" }}
+                            >
+                                <td className="px-2 py-2 font-bold text-[var(--purpledark)] text-left rounded-l-3xl">{idx + 1}</td>
+                                <td className="px-2 py-2 text-[var(--purpledark)] text-left truncate max-w-[120px]">{row.name}</td>
+                                <td className="px-2 py-2 text-[var(--purpledark)] text-center">{row.displayAvg}</td>
+                                <td className="px-2 py-2 text-[var(--purpledark)] text-center rounded-r-3xl">{row.totalQuestions}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             </div>
         </div>
     );
